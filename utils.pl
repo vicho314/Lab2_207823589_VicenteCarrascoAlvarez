@@ -41,7 +41,6 @@ transpose(Lcols, L2):-
 	size_to_size(L2,0,Y,X),
 	terms_wrap(Lcols,0,X,0,Y,L2).
 
-use_module(library(apply)).
 use_module(library(lists)).
 
 in_bounds(X,Y):-
@@ -68,17 +67,4 @@ write_list_aux(L,N,V,L2,I):-
 
 write_list(L,N,V,L2):-
 	write_list_aux(L,N,V,L2,0).
-
-board_getxy(A,X,Y,V0):-
-	nth0(X,A,L),
-	nth0(Y,L,V0).
-
-diag_ascen_get(A,X,Y,C,B):-
-	in_bounds(X,Y),
-	board_getxy(A,X,Y,V0),
-	nth0(C,B,V0),
-	K is C+1,
-	X2 is X+1,
-	Y2 is Y+1,
-	diag_ascen_get(A,X2,Y2,K,B).
 
