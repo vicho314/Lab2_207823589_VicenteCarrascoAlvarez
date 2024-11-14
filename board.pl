@@ -1,11 +1,12 @@
-use_module(library(apply)). /* filter, map, foldl*/
-use_module(library(utils)).
-use_module(library(lists)).
+:- use_module(library(apply)). /* filter, map, foldl*/
+:- consult(utils).
+:- use_module(library(lists)).
 
 non_zero(A):-
 	A =\= 0.
+
 non_zero_list(A,B):-
-	exclude(non_zero,A,B).
+	include(non_zero,A,B).
 
 zero_fill(L2,Len,L2):-
 	length(L2,K),
@@ -73,8 +74,8 @@ play_piece(Board,Col,Piece,NBoard):-
 	board_col(Board,Col,C),
 	non_zero_list(C,C2),
 	append(C2,[Piece],NewC),
-	zero_fill(NewC,6,NewCol),
-	write_list(Board,Col,NewCol,NBoard).
+	zero_fill(NewC,6,NewC2),
+	write_list(Board,Col,NewC2,NBoard).
 
 diag_ascen_get(A,X,Y,C,B):-
         in_bounds(X,Y),
