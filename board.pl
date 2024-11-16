@@ -33,6 +33,11 @@ value_fill(L,Len,V,L2):-
 /* TDA piece */
 piece(Color,[Color]).
 
+/*Mala idea, blame RF.*/
+hash_piece(["red"],1).
+hash_piece(["yellow"],2).
+hash_piece(0,0).
+
 /* TDA board */
 col_length_empty(L):-
 	length(L,0).
@@ -77,6 +82,19 @@ play_piece(Board,Col,Piece,NBoard):-
 	zero_fill(NewC,6,NewC2),
 	write_list(Board,Col,NewC2,NBoard).
 
+in_bounds(X,Y):-
+	X < 7,
+	X >= 0,
+	Y < 6,
+	Y >= 0.
+
+diag_ascen_get(_,X,Y,_,B):-
+	not(in_bounds(X,Y)),
+	length(B,K),
+	K > 3,
+	K =< 6,
+	!.
+
 diag_ascen_get(A,X,Y,C,B):-
         in_bounds(X,Y),
         board_getxy(A,X,Y,V0),
@@ -85,3 +103,88 @@ diag_ascen_get(A,X,Y,C,B):-
         X2 is X+1,
         Y2 is Y+1,
         diag_ascen_get(A,X2,Y2,K,B).
+
+diag_descen_get(_,X,Y,_,B):-
+	not(in_bounds(X,Y)),
+	length(B,K),
+	K > 3,
+	K =< 6,
+	!.
+
+diag_descen_get(A,X,Y,C,B):-
+        in_bounds(X,Y),
+        board_getxy(A,X,Y,V0),
+        nth0(C,B,V0),
+        K is C+1,
+        X2 is X-1,
+        Y2 is Y-1,
+        diag_descen_get(A,X2,Y2,K,B).
+
+/*FIXME: length CPiece*/
+check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
+	length(Col,CPiece),
+	Consecutive = 4,
+	hash(WinPiece,Winner),
+	!.
+
+check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
+	nth0(CPiece,Col,Piece2),
+	not(Piece2 is WinPiece),
+	CPiece2 is CPiece+1,
+	check_win_wrapper(Col,Winner,WinPiece,0,CPiece2).
+
+/*FIXME: CPiece+1 bound*/
+check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
+	nth0(CPiece,Col,Piece2),
+	Piece2 is WinPiece,
+	Con2 is Consecutive+1,
+	CPiece2 is CPiece+1,
+	check_win_wrapper(Col,Winner,WinPiece,Consecutive2,CPiece2).
+
+/*FIXME: Refactorizar el código???*/
+check_vertical_wrapper(Board,NCol,Winner):-
+	board_col(Board,Ncol,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner,Piece1,1,1).
+
+check_vertical_win_wrapper(Board,NCol,Winner):-
+	NCol < 6,
+	Winner =\= 0,
+	!.
+
+check_vertical_win_wrapper(Board,NCol,Winner):-
+	NCol = 6,
+	Winner = 0,
+	!.
+
+check_vertical_win_wrapper(Board,NCol,Winner):-
+	check_vertical_wrapper(Board,NCol,Winner),
+	NCol2 is NCol+1,
+	check_vertical_win_wrapper(Board,NCol2,Winner).
+
+check_vertical_win(Board,Winner):-
+	check_vertical_win_wrapper(Board,0,Winner).
+
+/*Horizontal*/
+check_horizontal_wrapper(Board,NCol,Winner):-
+	board_fila(Board,Ncol,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner,Piece1,1,1).
+
+check_horizontal_win_wrapper(Board,NCol,Winner):-
+	NCol < 7,
+	Winner =\= 0,
+	!.
+
+check_horizontal_win_wrapper(Board,NCol,Winner):-
+	NCol = 7,
+	Winner = 0,
+	!.
+
+check_horizontal_win_wrapper(Board,NCol,Winner):-
+	check_horizontal_wrapper(Board,NCol,Winner),
+	NCol2 is NCol+1,
+	check_horizontal_win_wrapper(Board,NCol2,Winner).
+
+check_horizontal_win(Board,Winner):-
+	check_horizontal_win_wrapper(Board,0,Winner).

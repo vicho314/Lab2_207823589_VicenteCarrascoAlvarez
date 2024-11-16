@@ -43,12 +43,6 @@ transpose(Lcols, L2):-
 	size_to_size(L2,0,Y,X),
 	terms_wrap(Lcols,0,X,0,Y,L2).
 
-in_bounds(X,Y):-
-	X >= 0,
-	X < 7,
-	Y >= 0,
-	Y < 6.
-
 write_list_aux(L,_,_,L2,I):-
 	length(L,I),
 	length(L2,I),
