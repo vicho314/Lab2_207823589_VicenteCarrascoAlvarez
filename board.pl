@@ -3,7 +3,7 @@
 :- use_module(library(lists)).
 
 non_zero(A):-
-	A =\= 0.
+	not(A = 0).
 
 non_zero_list(A,B):-
 	include(non_zero,A,B).
@@ -124,38 +124,36 @@ diag_descen_get(A,X,Y,C,B):-
 check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
 	length(Col,CPiece),
 	Consecutive = 4,
-	hash(WinPiece,Winner),
+	hash_piece(WinPiece,Winner),
 	!.
 
-check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
+check_win_wrapper(Col,Winner,WinPiece,_,CPiece):-
 	nth0(CPiece,Col,Piece2),
-	not(Piece2 is WinPiece),
+	not(Piece2 = WinPiece),
 	CPiece2 is CPiece+1,
 	check_win_wrapper(Col,Winner,WinPiece,0,CPiece2).
 
 /*FIXME: CPiece+1 bound*/
 check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
 	nth0(CPiece,Col,Piece2),
-	Piece2 is WinPiece,
-	Con2 is Consecutive+1,
+	Piece2 = WinPiece,
+	Consecutive2 is Consecutive+1,
 	CPiece2 is CPiece+1,
 	check_win_wrapper(Col,Winner,WinPiece,Consecutive2,CPiece2).
 
 /*FIXME: Refactorizar el código???*/
 check_vertical_wrapper(Board,NCol,Winner):-
-	board_col(Board,Ncol,Col),
+	board_col(Board,NCol,Col),
 	nth0(0,Col,Piece1),
 	check_win_wrapper(Col,Winner,Piece1,1,1).
 
-check_vertical_win_wrapper(Board,NCol,Winner):-
+check_vertical_win_wrapper(_,NCol,Winner):-
 	NCol < 6,
-	Winner =\= 0,
-	!.
+	hash_piece(Piece,Winner).
 
-check_vertical_win_wrapper(Board,NCol,Winner):-
+check_vertical_win_wrapper(_,NCol,Winner):-
 	NCol = 6,
-	Winner = 0,
-	!.
+	Winner = 0.
 
 check_vertical_win_wrapper(Board,NCol,Winner):-
 	check_vertical_wrapper(Board,NCol,Winner),
@@ -167,18 +165,18 @@ check_vertical_win(Board,Winner):-
 
 /*Horizontal*/
 check_horizontal_wrapper(Board,NCol,Winner):-
-	board_fila(Board,Ncol,Col),
+	board_fila(Board,NCol,Col),
 	nth0(0,Col,Piece1),
 	check_win_wrapper(Col,Winner,Piece1,1,1).
 
-check_horizontal_win_wrapper(Board,NCol,Winner):-
+check_horizontal_win_wrapper(_,NCol,Winner):-
 	NCol < 7,
-	Winner =\= 0,
+	not(Winner is 0),
 	!.
 
-check_horizontal_win_wrapper(Board,NCol,Winner):-
+check_horizontal_win_wrapper(_,NCol,Winner):-
 	NCol = 7,
-	Winner = 0,
+	Winner is 0,
 	!.
 
 check_horizontal_win_wrapper(Board,NCol,Winner):-
