@@ -145,23 +145,25 @@ check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
 check_vertical_wrapper(Board,NCol,Winner):-
 	board_col(Board,NCol,Col),
 	nth0(0,Col,Piece1),
-	check_win_wrapper(Col,Winner,Piece1,1,1).
+	check_win_wrapper(Col,Winner,Piece1,1,1),
+	not(Winner = 0),
+	!.
 
-check_vertical_win_wrapper(_,NCol,Winner):-
-	NCol < 6,
-	hash_piece(Piece,Winner).
-
-check_vertical_win_wrapper(_,NCol,Winner):-
-	NCol = 6,
-	Winner = 0.
-
-check_vertical_win_wrapper(Board,NCol,Winner):-
-	check_vertical_wrapper(Board,NCol,Winner),
+check_vertical_wrapper(Board,NCol,Winner):-
+	board_col(Board,NCol,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner1,Piece1,1,1),
+	Winner1 = 0,
 	NCol2 is NCol+1,
-	check_vertical_win_wrapper(Board,NCol2,Winner).
+	check_vertical_wrapper(Board,NCol2,Winner).
+
+check_vertical_wrapper(_,NCol,Winner):-
+	NCol = 6,
+	Winner = 0,
+	!.
 
 check_vertical_win(Board,Winner):-
-	check_vertical_win_wrapper(Board,0,Winner).
+	check_vertical_wrapper(Board,0,Winner).
 
 /*Horizontal*/
 check_horizontal_wrapper(Board,NCol,Winner):-
