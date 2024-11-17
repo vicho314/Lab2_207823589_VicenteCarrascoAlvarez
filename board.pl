@@ -122,7 +122,7 @@ diag_descen_get(A,X,Y,C,B):-
 
 /*FIXME: length CPiece*/
 check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
-	length(Col,CPiece),
+	/*length(Col,CPiece),*/
 	Consecutive = 4,
 	hash_piece(WinPiece,Winner),
 	!.
@@ -146,21 +146,20 @@ check_vertical_wrapper(Board,NCol,Winner):-
 	board_col(Board,NCol,Col),
 	nth0(0,Col,Piece1),
 	check_win_wrapper(Col,Winner,Piece1,1,1),
-	not(Winner = 0),
+	not(Winner is 0),
 	!.
 
 check_vertical_wrapper(Board,NCol,Winner):-
 	board_col(Board,NCol,Col),
 	nth0(0,Col,Piece1),
 	check_win_wrapper(Col,Winner1,Piece1,1,1),
-	Winner1 = 0,
+	Winner1 is 0,
 	NCol2 is NCol+1,
 	check_vertical_wrapper(Board,NCol2,Winner).
 
 check_vertical_wrapper(_,NCol,Winner):-
 	NCol = 6,
-	Winner = 0,
-	!.
+	Winner is 0.
 
 check_vertical_win(Board,Winner):-
 	check_vertical_wrapper(Board,0,Winner).
@@ -169,22 +168,23 @@ check_vertical_win(Board,Winner):-
 check_horizontal_wrapper(Board,NCol,Winner):-
 	board_fila(Board,NCol,Col),
 	nth0(0,Col,Piece1),
-	check_win_wrapper(Col,Winner,Piece1,1,1).
-
-check_horizontal_win_wrapper(_,NCol,Winner):-
-	NCol < 7,
+	check_win_wrapper(Col,Winner,Piece1,1,1),
 	not(Winner is 0),
 	!.
 
-check_horizontal_win_wrapper(_,NCol,Winner):-
-	NCol = 7,
-	Winner is 0,
-	!.
-
-check_horizontal_win_wrapper(Board,NCol,Winner):-
-	check_horizontal_wrapper(Board,NCol,Winner),
+check_horizontal_wrapper(Board,NCol,Winner):-
+	board_fila(Board,NCol,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner1,Piece1,1,1),
+	Winner1 is 0,
 	NCol2 is NCol+1,
-	check_horizontal_win_wrapper(Board,NCol2,Winner).
+	check_horizontal_wrapper(Board,NCol2,Winner).
+
+check_horizontal_wrapper(_,NCol,Winner):-
+	NCol = 7,
+	Winner is 0.
 
 check_horizontal_win(Board,Winner):-
-	check_horizontal_win_wrapper(Board,0,Winner).
+	check_horizontal_wrapper(Board,0,Winner).
+
+/*Diagonal ascendente*/
