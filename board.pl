@@ -38,6 +38,13 @@ hash_piece(["red"],1).
 hash_piece(["yellow"],2).
 hash_piece(0,0).
 
+hash_or(0,0,0).
+hash_or(A,B,C):-
+	((A > 0,
+	C = A);
+	(B > 0,
+	C = B)).
+
 /* TDA board */
 col_length_empty(L):-
 	length(L,0).
@@ -121,7 +128,7 @@ diag_descen_get(A,X,Y,C,B):-
         diag_descen_get(A,X2,Y2,K,B).
 
 /*FIXME: length CPiece*/
-check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
+check_win_wrapper(_,Winner,WinPiece,Consecutive,_):-
 	/*length(Col,CPiece),*/
 	Consecutive = 4,
 	hash_piece(WinPiece,Winner),
@@ -188,3 +195,68 @@ check_horizontal_win(Board,Winner):-
 	check_horizontal_wrapper(Board,0,Winner).
 
 /*Diagonal ascendente*/
+check_ascen_wrapper(Board,Points,Index,Winner):-
+	nth0(Index,Points,[X,Y]),
+	diag_ascen_get(Board,X,Y,0,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner,Piece1,1,1),
+	not(Winner is 0),
+	!.
+
+check_ascen_wrapper(Board,Points,Index,Winner):-
+	nth0(Index,Points,[X,Y]),
+	diag_ascen_get(Board,X,Y,0,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner1,Piece1,1,1),
+	Winner1 is 0,
+	Index2 is Index+1,
+	check_ascen_wrapper(Board,Points,Index2,Winner).
+
+check_ascen_wrapper(_,Points,Index,Winner):-
+	length(Points,K),
+	Index = K,
+	Winner is 0.
+
+check_ascen_win(Board,Winner):-
+	(P = [[0,0],[1,0],[2,0],[3,0],[0,1],[0,2]]),
+	check_ascen_wrapper(Board,P,0,Winner).
+
+
+/*Diagonal descendente*/
+check_descen_wrapper(Board,Points,Index,Winner):-
+	nth0(Index,Points,[X,Y]),
+	diag_descen_get(Board,X,Y,0,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner,Piece1,1,1),
+	not(Winner is 0),
+	!.
+
+check_descen_wrapper(Board,Points,Index,Winner):-
+	nth0(Index,Points,[X,Y]),
+	diag_descen_get(Board,X,Y,0,Col),
+	nth0(0,Col,Piece1),
+	check_win_wrapper(Col,Winner1,Piece1,1,1),
+	Winner1 is 0,
+	Index2 is Index+1,
+	check_descen_wrapper(Board,Points,Index2,Winner).
+
+check_descen_wrapper(_,Points,Index,Winner):-
+	length(Points,K),
+	Index = K,
+	Winner is 0.
+
+check_descen_win(Board,Winner):-
+	(P = [[0,5],[1,5],[2,5],[3,5],[0,4],[0,3]]),
+	check_descen_wrapper(Board,P,0,Winner).
+
+check_diagonal_win(Board,Winner):-
+	check_ascen_win(Board,Winner1),
+	check_descen_win(Board,Winner2),
+	hash_or(Winner1,Winner2,Winner).
+
+who_is_winner(Board,Winner):-
+	check_vertical_win(Board,W1),
+	check_horizontal_win(Board,W2),
+	check_diagonal_win(Board,W3),
+	hash_or(W1,W2,W4),
+	hash_or(W3,W4,Winner).
