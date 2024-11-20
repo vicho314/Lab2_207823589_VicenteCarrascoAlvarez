@@ -261,3 +261,10 @@ who_is_winner(Board,Winner):-
 	check_diagonal_win(Board,W3),
 	hash_or(W1,W2,W4),
 	hash_or(W3,W4,Winner).
+
+who_is_loser(0,0).
+who_is_loser(1,2).
+who_is_loser(2,1).
+
+display_board(Board):-
+	maplist(writeln,Board).

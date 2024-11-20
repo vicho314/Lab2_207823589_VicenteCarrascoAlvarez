@@ -26,3 +26,21 @@ player_rem_set([A1,A2,A3,A4,A5,A6,_],I,[A1,A2,A3,A4,A5,A6,I]).
 player_no_pieces(P):-
 	player_rem(P,Rem),
 	Rem = 0.
+
+/*0 = Loss, 1 = Win, 2 = Draw*/
+player_update_stats(P,0,NewP):-
+	player_losses(P,L),
+	L2 is L+1,
+	player_losses_set(P,L2,NewP).
+	
+
+player_update_stats(P,1,NewP):-
+	player_wins(P,L),
+	L2 is L+1,
+	player_wins_set(P,L2,NewP).
+
+
+player_update_stats(P,2,NewP):-
+	player_draws(P,L),
+	L2 is L+1,
+	player_draws_set(P,L2,NewP).

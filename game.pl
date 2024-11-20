@@ -32,3 +32,44 @@ is_draw(Game):-
 	player_no_pieces(P1),
 	player_no_pieces(P2).
 
+is_end(Game):-
+	game_cturn(Game,Ct),
+	Ct = -1.
+
+/* 
+ * Las preguntas causaron la caída de los ángeles.
+*/
+/* FIXME: R E V I S A R  el documento de RF, probablemente cambien 
+la definición de este predicado.*/
+/* Asume que CurrentTurn es End (-1).*/
+game_update_stats(Game,OldPlayer,NewPlayer):-
+	is_end(Game),
+	game_board(Game,Board),
+	who_is_winner(Board,Id1),
+	Id1 > 0,
+	/*Mala idea, pero en TDA Board no tenemos Player.*/
+	player_id(OldPlayer,Id1),
+	player_update_stats(OldPlayer,1,NewPlayer).
+
+game_update_stats(Game,OldPlayer,NewPlayer):-
+	is_end(Game),
+	game_board(Game,Board),
+	who_is_winner(Board,Id1),
+	who_is_loser(Id1,Id2),
+	Id2 > 0,
+	player_id(OldPlayer,Id2),
+	player_update_stats(OldPlayer,0,NewPlayer).
+
+game_update_stats(Game,OldPlayer,NewPlayer):-
+	is_end(Game),
+	is_draw(Game),
+	player_update_stats(OldPlayer,2,NewPlayer).
+
+get_board(Game,Board):-
+	game_board(Game,Board),
+	display_board(Board).
+
+/* 'Debiste haber apuntado a la cabeza.' */
+end_game(Game,Game2):-
+	game_cturn_set(Game,-1,Game2).
+
