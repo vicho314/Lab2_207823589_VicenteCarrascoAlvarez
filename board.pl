@@ -78,8 +78,9 @@ board_getxy(Board,X,Y,V):-
 	nth0(Y,Col,V).		
 
 can_play(Board):-
-	include(col_length_notfull,Board,Board1),
-	length(Board1,Notfullcols),
+	maplist(non_zero_list,Board,Board1),
+	include(col_length_notfull,Board1,Board2),
+	length(Board2,Notfullcols),
 	Notfullcols > 0.
 
 play_piece(Board,Col,Piece,NBoard):-

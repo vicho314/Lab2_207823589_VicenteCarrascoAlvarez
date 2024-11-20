@@ -18,8 +18,11 @@ player_id_set([_,A2,A3,A4,A5,A6,A7],I,[I,A2,A3,A4,A5,A6,A7]).
 player_name_set([A1,_,A3,A4,A5,A6,A7],I,[A1,I,A3,A4,A5,A6,A7]).
 player_color_set([A1,A2,_,A4,A5,A6,A7],I,[A1,A2,I,A4,A5,A6,A7]).
 player_wins_set([A1,A2,A3,_,A5,A6,A7],I,[A1,A2,A3,I,A5,A6,A7]).
-player_losses_set([A1,A2,A3,A4,_,A6,A7],I,[A1,A2,A3,A4,_,A6,A7]).
+player_losses_set([A1,A2,A3,A4,_,A6,A7],I,[A1,A2,A3,A4,I,A6,A7]).
 player_draws_set([A1,A2,A3,A4,A5,_,A7],I,[A1,A2,A3,A4,A5,I,A7]).
 player_rem_set([A1,A2,A3,A4,A5,A6,_],I,[A1,A2,A3,A4,A5,A6,I]).
 
 /* Funciones */
+player_no_pieces(P):-
+	player_rem(P,Rem),
+	Rem = 0.

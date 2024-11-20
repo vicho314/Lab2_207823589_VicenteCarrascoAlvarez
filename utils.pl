@@ -62,3 +62,14 @@ write_list_aux(L,N,V,L2,I):-
 write_list(L,N,V,L2):-
 	write_list_aux(L,N,V,L2,0).
 
+/*TDA Stack*/
+stack([]).
+stack_push(St1,V,St2):-
+	append([V],St1,St2).
+
+stack_top(St1,V):-
+	nth0(0,St1,V).
+
+stack_pop(St1,St2):-
+	stack_top(St1,V),
+	append([V],St2,St1). /*Sipo*/
