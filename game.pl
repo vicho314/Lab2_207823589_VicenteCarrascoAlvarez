@@ -32,6 +32,11 @@ is_draw(Game):-
 	player_no_pieces(P1),
 	player_no_pieces(P2).
 
+is_win(Game):-
+	game_board(Game,B),
+	who_is_winner(B,W),
+	W > 0.
+
 is_end(Game):-
 	game_cturn(Game,Ct),
 	Ct = -1.
@@ -84,3 +89,62 @@ get_current_player(Game,P):-
 	Id >= 0,
 	game_player2(P),
 	player_id(P,Id).
+
+game_update_player(Game,NewP,NewG):-
+	game_player1(Game,OldP),
+	player_id(OldP,Id),
+	player_id(NewP,Id),
+	game_player1_set(Game,NewP,NewG).
+
+game_update_player(Game,NewP,NewG):-
+	game_player2(Game,OldP),
+	player_id(OldP,Id),
+	player_id(NewP,Id),
+	game_player2_set(Game,NewP,NewG).
+
+game_history_add(Game,Col,Pz,NewG):-
+	game_history(Game,H),
+	stack_push(H,Col|Pz,H2),
+	game_history_set(Game,H2,NewG).
+
+/*verificar si hay win o empate, y terminar juego*/
+player_play(Game,_,-1,NewGame):-
+	is_draw(Game),
+	game_player1(Game,P1),
+	game_player1(Game,P2),
+	update_stats(Game,P1,NP1),
+	update_stats(Game,P2,NP2),
+	game_update_player(Game,NP1,G2),
+	game_update_player(G2,NP2,G3),
+	end_game(G3,NewGame).
+
+player_play(Game,_,-1,NewGame):-
+	is_win(Game),
+	game_player1(Game,P1),
+	game_player1(Game,P2),
+	update_stats(Game,P1,NP1),
+	update_stats(Game,P2,NP2),
+	game_update_player(Game,NP1,G2),
+	game_update_player(G2,NP2,G3),
+	end_game(G3,NewGame).
+
+/*Si no termina, sigue el juego.*/
+player_play(Game,_,-1,Game):-
+	not(is_win(Game)),
+	not(is_draw(Game)).
+	
+player_play(Game,Player,NCol,NewGame):-
+	get_current_player(Game,Player),
+	not(player_no_pieces(Player)),
+	game_board(Game,B1),
+	can_play_col(B1,NCol),
+	player_color(Player,Color),
+	piece(Color,Pz),
+	play_piece(B1,NCol,Pz,B2),
+	player_update_pieces(Player,-1,NewP),
+	game_board_set(Game,B2,G2),
+	game_update_player(G2,NewP,G3),
+	game_flip_turn(G3,G4),
+	game_history_add(G4,Col,Pz,G5),
+	/*verificar ganador o empate y actualizar*/
+	player_play(G5,Player,-1,NewGame).

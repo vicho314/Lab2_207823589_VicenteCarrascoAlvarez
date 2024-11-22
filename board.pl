@@ -83,6 +83,12 @@ can_play(Board):-
 	length(Board2,Notfullcols),
 	Notfullcols > 0.
 
+can_play_col(Board,NCol):-
+	maplist(non_zero_list,Board,Board1),
+	nth0(NCol,Board,C),
+	length(C,Notfullcol),
+	Notfullcol < 6.
+
 play_piece(Board,Col,Piece,NBoard):-
 	board_col(Board,Col,C),
 	non_zero_list(C,C2),

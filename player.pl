@@ -44,3 +44,8 @@ player_update_stats(P,2,NewP):-
 	player_draws(P,L),
 	L2 is L+1,
 	player_draws_set(P,L2,NewP).
+
+player_update_pieces(P,Add,NewP):-
+	player_rem(P,Pz),
+	Pz2 is Pz+Add,
+	player_rem_set(P,Pz2,NewP).
