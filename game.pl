@@ -42,7 +42,7 @@ is_end(Game):-
 /* FIXME: R E V I S A R  el documento de RF, probablemente cambien 
 la definición de este predicado.*/
 /* Asume que CurrentTurn es End (-1).*/
-game_update_stats(Game,OldPlayer,NewPlayer):-
+update_stats(Game,OldPlayer,NewPlayer):-
 	is_end(Game),
 	game_board(Game,Board),
 	who_is_winner(Board,Id1),
@@ -51,7 +51,7 @@ game_update_stats(Game,OldPlayer,NewPlayer):-
 	player_id(OldPlayer,Id1),
 	player_update_stats(OldPlayer,1,NewPlayer).
 
-game_update_stats(Game,OldPlayer,NewPlayer):-
+update_stats(Game,OldPlayer,NewPlayer):-
 	is_end(Game),
 	game_board(Game,Board),
 	who_is_winner(Board,Id1),
@@ -60,7 +60,7 @@ game_update_stats(Game,OldPlayer,NewPlayer):-
 	player_id(OldPlayer,Id2),
 	player_update_stats(OldPlayer,0,NewPlayer).
 
-game_update_stats(Game,OldPlayer,NewPlayer):-
+update_stats(Game,OldPlayer,NewPlayer):-
 	is_end(Game),
 	is_draw(Game),
 	player_update_stats(OldPlayer,2,NewPlayer).
@@ -73,3 +73,14 @@ get_board(Game,Board):-
 end_game(Game,Game2):-
 	game_cturn_set(Game,-1,Game2).
 
+get_current_player(Game,P):-
+	game_cturn(Game,Id),
+	Id >= 0,
+	game_player1(P),
+	player_id(P,Id).
+
+get_current_player(Game,P):-
+	game_cturn(Game,Id),
+	Id >= 0,
+	game_player2(P),
+	player_id(P,Id).
