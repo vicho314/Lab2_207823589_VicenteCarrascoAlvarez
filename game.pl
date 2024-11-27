@@ -1,5 +1,6 @@
-:- consult(utils).
-:- consult(board).
+:- module(game_20782358_CarrascoAlvarez,[]).
+:- use_module(utils_20782358_CarrascoAlvarez).
+:- use_module(board_20782358_CarrascoAlvarez).
 :- use_module(library(lists)).
 
 /*TDA Game*/
@@ -81,13 +82,13 @@ end_game(Game,Game2):-
 get_current_player(Game,P):-
 	game_cturn(Game,Id),
 	Id >= 0,
-	game_player1(P),
+	game_player1(Game,P),
 	player_id(P,Id).
 
 get_current_player(Game,P):-
 	game_cturn(Game,Id),
 	Id >= 0,
-	game_player2(P),
+	game_player2(Game,P),
 	player_id(P,Id).
 
 game_update_player(Game,NewP,NewG):-
@@ -145,6 +146,6 @@ player_play(Game,Player,NCol,NewGame):-
 	game_board_set(Game,B2,G2),
 	game_update_player(G2,NewP,G3),
 	game_flip_turn(G3,G4),
-	game_history_add(G4,Col,Pz,G5),
+	game_history_add(G4,NCol,Pz,G5),
 	/*verificar ganador o empate y actualizar*/
 	player_play(G5,Player,-1,NewGame).

@@ -1,5 +1,6 @@
+:- module(board_20782358_CarrascoAlvarez,[]).
 :- use_module(library(apply)). /* filter, map, foldl*/
-:- consult(utils).
+:- use_module(utils_20782358_CarrascoAlvarez).
 :- use_module(library(lists)).
 
 non_zero(A):-
@@ -85,7 +86,7 @@ can_play(Board):-
 
 can_play_col(Board,NCol):-
 	maplist(non_zero_list,Board,Board1),
-	nth0(NCol,Board,C),
+	nth0(NCol,Board1,C),
 	length(C,Notfullcol),
 	Notfullcol < 6.
 
