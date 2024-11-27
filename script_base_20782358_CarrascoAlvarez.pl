@@ -1,8 +1,8 @@
 :- use_module(library(lists)).
-:- use_module(game).
-:- use_module(board).
-:- use_module(player).
-:- use_module(utils).
+:- use_module(game_20782358_CarrascoAlvarez).
+:- use_module(board_20782358_CarrascoAlvarez).
+:- use_module(player_20782358_CarrascoAlvarez).
+:- use_module(utils_20782358_CarrascoAlvarez).
 % 1. Crear jugadores (10 fichas cada uno para un juego corto)
 player(1, "Juan", "red", 0, 0, 0, 10, P1),
 player(2, "Mauricio", "yellow", 0, 0, 0, 10, P2),
@@ -17,7 +17,7 @@ game(P1, P2, EmptyBoard, 1, G0),
 player_play(G0, P1, 0, G1),% Juan juega en columna 0
 player_play(G1, P2, 1, G2),% Mauricio juega en columna 1
 player_play(G2, P1, 1, G3),% Juan juega en columna 1
-15player_play(G3, P2, 2, G4),% Mauricio juega en columna 2
+player_play(G3, P2, 2, G4),% Mauricio juega en columna 2
 player_play(G4, P1, 2, G5),% Juan juega en columna 2
 player_play(G5, P2, 3, G6),% Mauricio juega en columna 3
 player_play(G6, P1, 2, G7),% Juan juega en columna 2
