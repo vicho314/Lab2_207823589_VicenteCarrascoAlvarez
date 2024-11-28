@@ -40,6 +40,10 @@ is_win(Game):-
 	W > 0.
 
 is_end(Game):-
+	is_draw(Game);
+	is_win(Game).
+
+is_end(Game):-
 	game_cturn(Game,Ct),
 	Ct = -1.
 
@@ -50,7 +54,7 @@ is_end(Game):-
 la definición de este predicado.*/
 /* Asume que CurrentTurn es End (-1).*/
 update_stats(Game,OldPlayer,NewPlayer):-
-	is_end(Game),
+	% is_end(Game),
 	game_board(Game,Board),
 	who_is_winner(Board,Id1),
 	Id1 > 0,
@@ -59,7 +63,7 @@ update_stats(Game,OldPlayer,NewPlayer):-
 	player_update_stats(OldPlayer,1,NewPlayer).
 
 update_stats(Game,OldPlayer,NewPlayer):-
-	is_end(Game),
+	% is_end(Game),
 	game_board(Game,Board),
 	who_is_winner(Board,Id1),
 	who_is_loser(Id1,Id2),
@@ -68,7 +72,7 @@ update_stats(Game,OldPlayer,NewPlayer):-
 	player_update_stats(OldPlayer,0,NewPlayer).
 
 update_stats(Game,OldPlayer,NewPlayer):-
-	is_end(Game),
+	% is_end(Game),
 	is_draw(Game),
 	player_update_stats(OldPlayer,2,NewPlayer).
 
@@ -76,19 +80,15 @@ game_get_board(Game,Board):-
 	game_board(Game,Board),
 	display_board(Board).
 
-/* 'Debiste haber apuntado a la cabeza.' */
-end_game(Game,Game2):-
-	game_cturn_set(Game,-1,Game2).
-
 get_current_player(Game,P):-
 	game_cturn(Game,Id),
-	Id >= 0,
+	Id > 0,
 	player_id(P,Id),
 	game_player1(Game,P).
 
 get_current_player(Game,P):-
 	game_cturn(Game,Id),
-	Id >= 0,
+	Id > 0,
 	player_id(P,Id),
 	game_player2(Game,P).
 
@@ -123,28 +123,25 @@ game_flip_turn(Game,NewGame):-
 
 game_flip_turn(Game,Game):-
 	game_cturn(Game,Ct),
-	Ct is -1.
+	Ct = -1.
 
-/*verificar si hay win o empate, y terminar juego*/
-player_play(Game,_,-1,NewGame):-
-	is_draw(Game),
-	end_game(Game,G2),
-	game_player1(G2,P1),
-	game_player2(G2,P2),
-	update_stats(G2,P1,NP1),
-	update_stats(G2,P2,NP2),
-	game_update_player(G2,NP1,G3),
-	game_update_player(G3,NP2,NewGame).
 
+/* 'Debiste haber apuntado a la cabeza.' */
+end_game_stats(Game,NewGame):-
+	game_player1(Game,P1),
+        game_player2(Game,P2),
+        update_stats(Game,P1,NP1),
+        update_stats(Game,P2,NP2),
+        game_update_player(Game,NP1,G1),
+        game_update_player(G1,NP2,G2).
+
+end_game(Game,NewGame):-
+	game_cturn_set(Game,-1,NewGame).
+
+/*verificar si hay win o empate*/
 player_play(Game,_,-1,NewGame):-
-	is_win(Game),
-	end_game(Game,G2),
-	game_player1(G2,P1),
-	game_player2(G2,P2),
-	update_stats(G2,P1,NP1),
-	update_stats(G2,P2,NP2),
-	game_update_player(G2,NP1,G3),
-	game_update_player(G3,NP2,NewGame).
+	(is_draw(Game);is_win(Game)),
+	end_game_stats(Game,NewGame).
 
 /*Si no termina, sigue el juego.*/
 player_play(Game,_,-1,Game):-
@@ -153,6 +150,7 @@ player_play(Game,_,-1,Game):-
 	!.
 	
 player_play(Game,Player,NCol,NewGame):-
+	NCol >= 0,
 	get_current_player(Game,PlayerTest),
 	player_id(Player,Id),
 	player_id(PlayerTest,Id),
