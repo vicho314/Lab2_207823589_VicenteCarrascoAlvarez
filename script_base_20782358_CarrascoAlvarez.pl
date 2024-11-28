@@ -1,8 +1,10 @@
 :- use_module(library(lists)).
-:- use_module(game_20782358_CarrascoAlvarez).
-:- use_module(board_20782358_CarrascoAlvarez).
-:- use_module(player_20782358_CarrascoAlvarez).
-:- use_module(utils_20782358_CarrascoAlvarez).
+:- consult(game_20782358_CarrascoAlvarez).
+:- consult(board_20782358_CarrascoAlvarez).
+:- consult(player_20782358_CarrascoAlvarez).
+:- consult(utils_20782358_CarrascoAlvarez).
+
+%main([P1,P2,RedPiece,YellowPiece,EmptyBoard,G0,G1,G2,G3,G4,G5,G6,G7,G8,G9,G10,G11,CurrentBoard,CurrentPlayer,VerticalWinner,HorizontalWinner,DiagonalWinner,Winner,EndedGame,History,FinalBoard]):-
 % 1. Crear jugadores (10 fichas cada uno para un juego corto)
 player(1, "Juan", "red", 0, 0, 0, 10, P1),
 player(2, "Mauricio", "yellow", 0, 0, 0, 10, P2),
@@ -69,3 +71,4 @@ nl,
 write('Estado final del tablero: '),
 game_get_board(EndedGame, FinalBoard),
 write(FinalBoard).
+

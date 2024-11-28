@@ -1,4 +1,4 @@
-:- module(utils_20782358_CarrascoAlvarez,[]).
+/*:- module(utils_20782358_CarrascoAlvarez,[]).*/
 :- use_module(library(apply)).
 :- use_module(library(lists)).
 
@@ -42,7 +42,8 @@ transpose(Lcols, L2):-
 	length(A,Y),
 	length(L2,Y),
 	size_to_size(L2,0,Y,X),
-	terms_wrap(Lcols,0,X,0,Y,L2).
+	terms_wrap(Lcols,0,X,0,Y,L2),
+	!.
 
 write_list_aux(L,_,_,L2,I):-
 	length(L,I),

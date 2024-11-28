@@ -1,6 +1,6 @@
-:- module(board_20782358_CarrascoAlvarez,[]).
+/*:- module(board_20782358_CarrascoAlvarez,[]).*/
 :- use_module(library(apply)). /* filter, map, foldl*/
-:- use_module(utils_20782358_CarrascoAlvarez).
+:- consult(utils_20782358_CarrascoAlvarez).
 :- use_module(library(lists)).
 
 non_zero(A):-
@@ -95,7 +95,8 @@ play_piece(Board,Col,Piece,NBoard):-
 	non_zero_list(C,C2),
 	append(C2,[Piece],NewC),
 	zero_fill(NewC,6,NewC2),
-	write_list(Board,Col,NewC2,NBoard).
+	write_list(Board,Col,NewC2,NBoard),
+	!.
 
 in_bounds(X,Y):-
 	X < 7,
@@ -134,6 +135,12 @@ diag_descen_get(A,X,Y,C,B):-
         X2 is X-1,
         Y2 is Y-1,
         diag_descen_get(A,X2,Y2,K,B).
+
+check_win_wrapper(Col,Winner,WinPiece,Consecutive,CPiece):-
+	length(Col,CPiece),
+	Consecutive < 4,
+	hash_piece(0,Winner),
+	!.
 
 /*FIXME: length CPiece*/
 check_win_wrapper(_,Winner,WinPiece,Consecutive,_):-
@@ -196,8 +203,9 @@ check_horizontal_wrapper(Board,NCol,Winner):-
 	check_horizontal_wrapper(Board,NCol2,Winner).
 
 check_horizontal_wrapper(_,NCol,Winner):-
-	NCol = 7,
-	Winner is 0.
+	NCol = 6,
+	Winner is 0,
+	!.
 
 check_horizontal_win(Board,Winner):-
 	check_horizontal_wrapper(Board,0,Winner).
@@ -274,4 +282,5 @@ who_is_loser(1,2).
 who_is_loser(2,1).
 
 display_board(Board):-
-	maplist(writeln,Board).
+	maplist(writeln,Board),
+	!.
