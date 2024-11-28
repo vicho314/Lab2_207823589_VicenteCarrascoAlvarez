@@ -82,13 +82,13 @@ game_get_board(Game,Board):-
 
 get_current_player(Game,P):-
 	game_cturn(Game,Id),
-	Id > 0,
+	Id >= 0,
 	player_id(P,Id),
 	game_player1(Game,P).
 
 get_current_player(Game,P):-
 	game_cturn(Game,Id),
-	Id > 0,
+	Id >= 0,
 	player_id(P,Id),
 	game_player2(Game,P).
 
@@ -133,7 +133,7 @@ end_game_stats(Game,NewGame):-
         update_stats(Game,P1,NP1),
         update_stats(Game,P2,NP2),
         game_update_player(Game,NP1,G1),
-        game_update_player(G1,NP2,G2).
+        game_update_player(G1,NP2,NewGame).
 
 end_game(Game,NewGame):-
 	game_cturn_set(Game,-1,NewGame).
