@@ -322,9 +322,8 @@ check_horizontal_wrapper(Board,NCol,Winner):-
 
 % Nota: caso borde, no hay ganador, ya se revisaron las 6 filas.
 check_horizontal_wrapper(_,NCol,Winner):-
-	NCol = 5,
-	Winner is 0,
-	!.
+	NCol = 6,
+	Winner is 0.
 
 % Función para verificar un ganador horizontal.
 % Revisa las filas recursivamente, terminando si encuentra un ganador,
