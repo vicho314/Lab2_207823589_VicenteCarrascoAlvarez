@@ -62,8 +62,7 @@ write(Winner),
 nl,
 % 8. Verificación de empate
 write('¿Es empate? '),
-R = is_draw(G11),
-write(R),
+not(is_draw(G11)),
 nl,
 % 9. Finalizar juego y actualizar estadísticas
 end_game(G11, EndedGame),

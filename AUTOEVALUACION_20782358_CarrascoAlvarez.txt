@@ -1,0 +1,31 @@
+#RF:
+
+1.  RF1 - TDAs:			1
+2.  RF2 - Player constructor:	1
+3.  RF3 - Piece constructor:	0,75
+4.  RF4 - Board constructor:	0,75
+5.  RF5 - Board - can_play:	0,75 
+6.  RF6 - Board - play_piece:	1
+7.  RF7 - check_vertical_win:	0,75
+8.  RF8 - check_horizontal_win:	0,75
+9.  RF9 - check_diagonal_win:	0,75
+10. RF10- who_is_winner:		1
+11. RF11- Game constructor:	1
+12. RF12- game_history:		1
+13. RF13- is_draw:		1
+14. RF14- update_stats:		1
+15. RF15- get_current_player:	0,75
+16. RF16- game_get_board:	1
+17. RF17- end_game:		1
+18. RF18- player_play:		0,75
+
+# RNF:
+1. RNF1 - Autoevaluación: 1
+2. RNF2 - Lenguaje: 1
+3. RNF3 - Versión: 1
+4. RNF4 - Standard: 1
+5. RNF5 - Documentación: 0,75
+6. RNF6 - Organización: 0,75
+7. RNF7 - Historial: 0,5
+8. RNF8 - Script de pruebas: 0,75
+9. RNF9 - Prerrequisitos: 0,75

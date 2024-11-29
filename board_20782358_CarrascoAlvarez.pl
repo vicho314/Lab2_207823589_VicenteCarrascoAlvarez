@@ -286,7 +286,7 @@ check_vertical_wrapper(Board,NCol,Winner):-
 
 % Nota: caso borde, no hay ganador, ya se revisaron las 7 columnas.
 check_vertical_wrapper(_,NCol,Winner):-
-	NCol = 6,
+	NCol = 7,
 	Winner is 0.
 
 % Función para verificar un ganador vertical.

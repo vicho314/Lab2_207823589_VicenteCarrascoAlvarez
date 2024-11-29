@@ -142,6 +142,9 @@ update_stats(Game,OldPlayer,NewPlayer):-
 	is_draw(Game),
 	player_update_stats(OldPlayer,2,NewPlayer).
 
+update_stats(Game,OldPlayer,OldPlayer):-
+	!.
+
 % Muestra el tablero del juego actual en pantalla, y lo retorna.
 % Dom: Game
 % Rec: Board
@@ -235,7 +238,12 @@ end_game_stats(Game,NewGame):-
 % Dom: Game
 % Rec: Game
 end_game(Game,NewGame):-
-	game_cturn_set(Game,-1,NewGame).
+	end_game_stats(Game,G2),
+	game_cturn_set(G2,-1,NewGame).
+
+% Caso borde para que el script no se muera solo.
+end_game(Game,Game):-
+	game_cturn(Game,-1).
 
 /*verificar si hay win o empate*/
 % Función que se encarga de hacer las jugadas de un jugador en el tablero.
