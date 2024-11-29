@@ -3,13 +3,12 @@
 :- consult(board_20782358_CarrascoAlvarez).
 :- consult(player_20782358_CarrascoAlvarez).
 :- consult(utils_20782358_CarrascoAlvarez).
-
-%main([P1,P2,RedPiece,YellowPiece,EmptyBoard,G0,G1,G2,G3,G4,G5,G6,G7,G8,G9,G10,G11,CurrentBoard,CurrentPlayer,VerticalWinner,HorizontalWinner,DiagonalWinner,Winner,EndedGame,History,FinalBoard]):-
-% 1. Crear jugadores (10 fichas cada uno para un juego corto)
-player(1, "Juan", "red", 0, 0, 0, 10, P1),
-player(2, "Mauricio", "yellow", 0, 0, 0, 10, P2),
-% 2. Crear fichas
-piece("red", RedPiece),
+:-
+% 1 Crear jugadores (10 fichas cada uno para un juego corto)
+player(1, "Juan", 'red', 0, 0, 0, 10, P1),
+player(2, 'Mauricio', 'yellow', 0, 0, 0, 10, P2),
+% 2 Crear fichas
+piece('red', RedPiece),
 piece("yellow", YellowPiece),
 % 3. Crear tablero inicial vacío
 board(EmptyBoard),
@@ -58,7 +57,8 @@ write(Winner),
 nl,
 % 8. Verificación de empate
 write('¿Es empate? '),
-is_draw(G11),
+R = is_draw(G11),
+write(R),
 nl,
 % 9. Finalizar juego y actualizar estadísticas
 end_game(G11, EndedGame),
@@ -69,6 +69,7 @@ write(History),
 nl,
 % 11. Mostrar estado final del tablero
 write('Estado final del tablero: '),
+nl,
 game_get_board(EndedGame, FinalBoard),
 write(FinalBoard).
 
